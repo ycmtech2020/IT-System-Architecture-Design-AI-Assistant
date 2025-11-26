@@ -40,3 +40,8 @@ This project is licensed under the MIT License.
 
 ## Acknowledgments
 Built with Python, Flask, Graphviz, and OpenAI GPT APIs.
+
+<img width="1868" height="1044" alt="image" src="https://github.com/user-attachments/assets/c0b37b86-3483-4753-beef-9146afcb0a24" />
+<img width="1916" height="1081" alt="image" src="https://github.com/user-attachments/assets/88fe82bb-fe0d-479f-b885-0c3010a86a04" />
+
+
