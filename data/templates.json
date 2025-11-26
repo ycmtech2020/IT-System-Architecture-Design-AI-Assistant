@@ -1,0 +1,19 @@
+{
+  "patterns": [
+    {
+      "id": "three_tier_web_app",
+      "name": "Three-Tier Web Application",
+      "description": "A classic three-tier architecture with web, application, and database tiers."
+    },
+    {
+      "id": "microservices_with_api_gateway",
+      "name": "Microservices with API Gateway",
+      "description": "API gateway fronting multiple microservices with a shared database or separate datastores."
+    },
+    {
+      "id": "data_pipeline_batch",
+      "name": "Batch Data Pipeline",
+      "description": "Periodic data ingestion from source systems into a data warehouse and BI dashboards."
+    }
+  ]
+}
