@@ -1,0 +1,11 @@
+Prompt 1 — Initial high-level requirements
+We need an Android-based e-commerce application with product browsing, user accounts, shopping cart, order management, and a backend API service.
+
+Prompt 2 — Follow-up refinement
+Refine the architecture by adding a secure payment gateway and necessary changes in the backend to support it.
+
+Prompt 3 - Removal
+We don't need the payment gateway
+
+Prompt 4 — Final polish
+Now make the entire architecture production-ready with enhancements for security, scalability, monitoring, caching, and best-practice design improvements.
