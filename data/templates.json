@@ -17,3 +17,65 @@
     }
   ]
 }
+
+
+{
+  "patterns": [
+    {
+      "id": "three_tier_web_app",
+      "name": "Three-Tier Web Application",
+      "description": "A classic three-tier architecture with web, application, and database tiers.",
+      "components": [
+        { "id": "client", "label": "Browser / Client", "type": "client" },
+        { "id": "web", "label": "Web Server / Load Balancer", "type": "web" },
+        { "id": "app", "label": "Application Server", "type": "application" },
+        { "id": "db", "label": "Relational Database", "type": "database" }
+      ],
+      "connections": [
+        { "from": "client", "to": "web", "label": "HTTPS" },
+        { "from": "web", "to": "app", "label": "Internal HTTP" },
+        { "from": "app", "to": "db", "label": "SQL" }
+      ]
+    },
+    {
+      "id": "microservices_with_api_gateway",
+      "name": "Microservices with API Gateway",
+      "description": "API gateway fronting multiple microservices with a shared database or separate datastores.",
+      "components": [
+        { "id": "client", "label": "Client Apps", "type": "client" },
+        { "id": "gateway", "label": "API Gateway", "type": "gateway" },
+        { "id": "svc1", "label": "User Service", "type": "service" },
+        { "id": "svc2", "label": "Order Service", "type": "service" },
+        { "id": "svc3", "label": "Inventory Service", "type": "service" },
+        { "id": "dbuser", "label": "User DB", "type": "database" },
+        { "id": "dborder", "label": "Order DB", "type": "database" },
+        { "id": "dbinv", "label": "Inventory DB", "type": "database" }
+      ],
+      "connections": [
+        { "from": "client", "to": "gateway", "label": "HTTPS" },
+        { "from": "gateway", "to": "svc1", "label": "REST/JSON" },
+        { "from": "gateway", "to": "svc2", "label": "REST/JSON" },
+        { "from": "gateway", "to": "svc3", "label": "REST/JSON" },
+        { "from": "svc1", "to": "dbuser", "label": "SQL/NoSQL" },
+        { "from": "svc2", "to": "dborder", "label": "SQL/NoSQL" },
+        { "from": "svc3", "to": "dbinv", "label": "SQL/NoSQL" }
+      ]
+    },
+    {
+      "id": "data_pipeline_batch",
+      "name": "Batch Data Pipeline",
+      "description": "Periodic data ingestion from source systems into a data warehouse and BI dashboards.",
+      "components": [
+        { "id": "sources", "label": "Source Systems", "type": "source" },
+        { "id": "ingest", "label": "Ingestion / ETL", "type": "etl" },
+        { "id": "dwh", "label": "Data Warehouse", "type": "database" },
+        { "id": "bi", "label": "BI / Analytics", "type": "analytics" }
+      ],
+      "connections": [
+        { "from": "sources", "to": "ingest", "label": "Batch Files / APIs" },
+        { "from": "ingest", "to": "dwh", "label": "Transformed Data" },
+        { "from": "dwh", "to": "bi", "label": "SQL / Semantic Layer" }
+      ]
+    }
+  ]
+}
