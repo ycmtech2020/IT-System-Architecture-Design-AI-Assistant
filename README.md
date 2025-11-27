@@ -1,3 +1,8 @@
+<img width="1901" height="1003" alt="image" src="https://github.com/user-attachments/assets/1ee64694-66da-4a3b-a75d-63dabbb50340" />
+
+<img width="1904" height="1024" alt="image" src="https://github.com/user-attachments/assets/c3699378-0143-4f34-8fc2-85cb06270a06" />
+
+
 # AI Architecture Design Assistant
 
 This application is a web-based AI system that generates and visualizes IT system architecture plans from high-level requirements using Azure OpenAI API and Graphviz, refined through iterative prompts. It combines a backend engine for architecture generation with a frontend UI for interacting with the assistant.
