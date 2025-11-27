@@ -150,6 +150,98 @@
       color: #6b7280;
       margin-bottom: 0.25rem;
     }
+
+    /* ==========================
+       NFR REVIEW STYLES (new)
+       ========================== */
+
+    .nfr-section {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .nfr-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .nfr-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .nfr-pill-low {
+      background: #ecfdf3;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .nfr-pill-medium {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fed7aa;
+    }
+
+    .nfr-pill-high {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .nfr-pill-neutral {
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #e5e7eb;
+    }
+
+    .nfr-summary-text {
+      font-size: 0.85rem;
+      color: #4b5563;
+      margin-bottom: 0.35rem;
+    }
+
+    .nfr-issues-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .nfr-issue {
+      border-radius: 0.55rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.45rem 0.6rem;
+      background: #f9fafb;
+    }
+
+    .nfr-issue-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.2rem;
+    }
+
+    .nfr-issue-body {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-bottom: 0.15rem;
+    }
+
+    .nfr-issue-recommendation {
+      font-size: 0.8rem;
+      color: #111827;
+    }
   </style>
 </head>
 <body>
@@ -177,7 +269,7 @@
     </div>
   </section>
 
-  <!-- Right: Output / Diagram / DOT -->
+  <!-- Right: Output / Diagram / DOT / NFR -->
   <section class="panel">
     <div class="panel-header">Architecture Output</div>
     <div class="panel-body">
@@ -201,6 +293,18 @@
         </p>
         <textarea id="dotText" readonly></textarea>
       </div>
+
+      <!-- ==========================
+           NFR REVIEW SECTION (new)
+           ========================== -->
+      <div id="nfrSection" class="nfr-section" style="display:none;">
+        <div class="nfr-header">
+          <span>Non-Functional Requirements (NFR) Review</span>
+          <span id="nfrRiskPill" class="nfr-pill nfr-pill-neutral">Overall risk: Unknown</span>
+        </div>
+        <p id="nfrSummary" class="nfr-summary-text"></p>
+        <div id="nfrIssues" class="nfr-issues-list"></div>
+      </div>
     </div>
   </section>
 </main>
@@ -215,6 +319,12 @@
   const diagramImageEl = document.getElementById("diagramImage");
   const dotAreaEl = document.getElementById("dotArea");
   const dotTextEl = document.getElementById("dotText");
+
+  // NFR elements (new)
+  const nfrSectionEl = document.getElementById("nfrSection");
+  const nfrRiskPillEl = document.getElementById("nfrRiskPill");
+  const nfrSummaryEl = document.getElementById("nfrSummary");
+  const nfrIssuesEl = document.getElementById("nfrIssues");
 
   // Accumulated requirements across this browser session
   let messageHistory = [];
@@ -238,6 +348,71 @@
     chatEl.scrollTop = chatEl.scrollHeight;
   }
 
+  function renderNfrReport(nfr) {
+    // If no NFR report, hide the section
+    if (!nfr) {
+      nfrSectionEl.style.display = "none";
+      return;
+    }
+
+    nfrSectionEl.style.display = "block";
+
+    const overall = (nfr.overall_risk || "Unknown").toLowerCase();
+    let pillClass = "nfr-pill-neutral";
+    if (overall === "low") {
+      pillClass = "nfr-pill-low";
+    } else if (overall === "medium") {
+      pillClass = "nfr-pill-medium";
+    } else if (overall === "high") {
+      pillClass = "nfr-pill-high";
+    }
+
+    nfrRiskPillEl.className = "nfr-pill " + pillClass;
+    nfrRiskPillEl.textContent = "Overall risk: " + (nfr.overall_risk || "Unknown");
+
+    nfrSummaryEl.textContent = nfr.summary || "No NFR summary available.";
+
+    const issues = Array.isArray(nfr.issues) ? nfr.issues : [];
+    nfrIssuesEl.innerHTML = "";
+
+    if (issues.length === 0) {
+      const p = document.createElement("p");
+      p.className = "meta";
+      p.textContent = "No specific NFR issues reported.";
+      nfrIssuesEl.appendChild(p);
+      return;
+    }
+
+    issues.forEach((issue, index) => {
+      const issueDiv = document.createElement("div");
+      issueDiv.className = "nfr-issue";
+
+      const title = document.createElement("div");
+      title.className = "nfr-issue-title";
+      const cat = issue.category || "General";
+      const sev = issue.severity || "Unknown";
+      title.textContent = cat + " (" + sev + ")";
+
+      const body = document.createElement("div");
+      body.className = "nfr-issue-body";
+      if (issue.finding) {
+        body.textContent = issue.finding;
+      }
+
+      const rec = document.createElement("div");
+      rec.className = "nfr-issue-recommendation";
+      if (issue.recommendation) {
+        rec.textContent = "Recommendation: " + issue.recommendation;
+      }
+
+      issueDiv.appendChild(title);
+      if (issue.finding) issueDiv.appendChild(body);
+      if (issue.recommendation) issueDiv.appendChild(rec);
+
+      nfrIssuesEl.appendChild(issueDiv);
+    });
+  }
+
   async function sendMessage() {
     const text = userInputEl.value.trim();
     if (!text) return;
@@ -249,7 +424,6 @@
     sendBtnEl.disabled = true;
     sendBtnEl.textContent = "Thinking…";
 
-    // Build payload: send previous prompts as history, and current text as message
     const payload = {
       message: text,
       history: messageHistory,
@@ -302,6 +476,9 @@
         dotAreaEl.style.display = "block";
         dotTextEl.value = data.dot;
       }
+
+      // Render NFR report (new)
+      renderNfrReport(data.nfr_report);
 
       appendMessage(
         "assistant",
